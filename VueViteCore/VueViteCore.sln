@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VueViteCore", "VueViteCore.csproj", "{E8A590A6-4529-4E7F-B4EB-C1B1F7578F4D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8A590A6-4529-4E7F-B4EB-C1B1F7578F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A590A6-4529-4E7F-B4EB-C1B1F7578F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A590A6-4529-4E7F-B4EB-C1B1F7578F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A590A6-4529-4E7F-B4EB-C1B1F7578F4D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
