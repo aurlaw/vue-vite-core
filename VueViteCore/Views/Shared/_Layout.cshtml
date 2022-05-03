@@ -1,12 +1,30 @@
-﻿<!DOCTYPE html>
+﻿@inject Manifest _manifest;
+@{
+    var manifest = _manifest.GetManifest();
+}
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - VueViteCore</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+@*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/VueViteCore.styles.css" asp-append-version="true"/>
+*@
+<environment names="Staging,Production">
+@{
+    if(manifest is not null)
+    {
+        <link rel="stylesheet" href="@manifest?.SrcMainJs?.CssFile"/>
+    }
+}
+</environment>
+
+
 </head>
 <body>
 <header>
@@ -38,12 +56,27 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2022 - VueViteCore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2022 - Vue Vite Core - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
 </footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@*<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+*@
+<environment names="Development">
+    <script type="module" src="http://localhost:3000/src/main.js"></script>
+</environment>
+
+<!-- if development -->
+<environment names="Staging,Production">
+@{
+    if(manifest is not null)
+    {
+        <script src="@manifest?.SrcMainJs?.JsFile"></script>
+    }
+}
+</environment>
+
 </body>
 </html>

@@ -1,4 +1,9 @@
+using VueViteCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// DI
+builder.Services.AddSingleton<Manifest>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -6,4 +6,29 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+	<ItemGroup>
+		<!-- Don't publish the SPA source files, but do show them in the project files list -->
+		<Content Remove="wwwroot\ClientComponents\**" />
+		<None Remove="wwwroot\ClientComponents\**" />
+		<None Include="wwwroot\ClientComponents\**" Exclude="$(SpaRoot)node_modules\**" />
+	</ItemGroup>
+
+
+	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+		<Exec WorkingDirectory="wwwroot\ClientComponents" Command="npm install" />
+		<Exec WorkingDirectory="wwwroot\ClientComponents" Command="npm run build" />
+
+		<!-- Include the newly-built files in the publish output -->
+		<ItemGroup>
+			<DistFiles Include="wwwroot\ClientComponents\dist\**" />
+			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+				<RelativePath>wwwroot\dist\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+	</Target>
+	
+
 </Project>
