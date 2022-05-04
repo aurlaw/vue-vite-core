@@ -3,14 +3,22 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import VLink from '../components/VLink.vue'
 
+      function getLink(linkPath) {
+          return linkPath;
+      }
+      function setActiveClass(linkPath) {
+        return window.location.pathname === linkPath ? 'active' : '';
+      }
+
+
 </script>
 
 <template>
 <section>
 <ul class="nav nav-tabs">
-    <li class="nav-item">Home</li>
-    <li class="nav-item">About</li>
-    <li class="nav-item">Under Construction</li>
+    <li class="nav-item"><v-link class="nav-link" :class="setActiveClass('/home/router')" :href="getLink('/home/router')">Home</v-link></li>
+    <li class="nav-item"><v-link class="nav-link" :class="setActiveClass('/home/router/about')" :href="getLink('/home/router/about')">About</v-link></li>
+    <li class="nav-item"><v-link class="nav-link" :class="setActiveClass('/home/router/foo')" :href="getLink('/home/router/foo')">Under Construction</v-link></li>
   </ul>
   <article class="shadow">
     <div class="container">
@@ -19,22 +27,3 @@ import VLink from '../components/VLink.vue'
   </article>
 </section>
 </template>
-
-
-// <script>
-// import VLink from '../components/VLink.vue'
-// export default {
-//   name: 'MainLayout',
-//   components: {
-//     VLink
-//   },
-//   methods: {
-//       getLink(linkPath) {
-//           return linkPath;
-//       },
-//       setActiveClass(linkPath) {
-//         return window.location.pathname === linkPath ? 'active' : '';
-//       },
-//   }
-// }
-// </script>

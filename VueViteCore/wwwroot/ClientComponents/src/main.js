@@ -1,24 +1,26 @@
 // add the beginning of your app entry
 import 'vite/modulepreload-polyfill'
-import { createApp } from 'vue'
-import App from './components/App.vue'
-import Privacy from './components/Privacy.vue'
-import Contact from './components/Contact.vue'
+import { createApp, defineAsyncComponent } from 'vue'
+
+// import App from './components/App.vue'
+// import Privacy from './components/Privacy.vue'
+// import Contact from './components/Contact.vue'
 // import SimpleRouter from './components/route-comp/SimpleRouter.vue'
 
 
-// const App = () => import('./components/App.vue');
-// const Privacy = () => import('./components/Privacy.vue');
-// const Contact = () => import('./components/Contact.vue');
-
-
+const App = defineAsyncComponent(() => import('./components/App.vue'));
+const Privacy = defineAsyncComponent(() => import('./components/Privacy.vue'));
+const Contact = defineAsyncComponent(() => import('./components/Contact.vue'));
+const SimpleRouter = defineAsyncComponent(() => import('./components/route-comp/SimpleRouter.vue'));
+ 
 import './sass/_custom.scss';
 import "bootstrap/dist/js/bootstrap.min.js";
 
 const APPS = { 
     App,
-    Privacy,
-    Contact
+    Privacy, 
+    Contact,
+    SimpleRouter
 };
 // createApp(App).mount('#app')
 function renderAppInElement(el) {

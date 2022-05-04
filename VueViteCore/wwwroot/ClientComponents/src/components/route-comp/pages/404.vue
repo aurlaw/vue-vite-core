@@ -9,4 +9,3 @@ import MainLayout from '../layouts/Main-Layout.vue'
     <p>Page not found.</p>
   </main-layout>
 </template>
-<script>

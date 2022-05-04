@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // builder.Services.AddSingleton<Manifest>();
 
 // Add services to the container.
+builder.Services.AddRouting(x => x.LowercaseUrls = true);
 var mvcBuilder = builder.Services.AddControllersWithViews();
 
 if (builder.Environment.IsDevelopment())
