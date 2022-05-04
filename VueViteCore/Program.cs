@@ -1,12 +1,17 @@
-using VueViteCore;
+// using VueViteCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DI
-builder.Services.AddSingleton<Manifest>();
+// // DI
+// builder.Services.AddSingleton<Manifest>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+var mvcBuilder = builder.Services.AddControllersWithViews();
+
+if (builder.Environment.IsDevelopment())
+{
+    mvcBuilder.AddRazorRuntimeCompilation();
+}
 
 var app = builder.Build();
 
