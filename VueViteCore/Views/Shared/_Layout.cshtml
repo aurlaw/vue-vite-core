@@ -12,16 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - VueViteCore</title>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="/dist/assets/main.js" asp-append-version="true"/>
-        @* @{ *@
-        @*     if(manifest is not null) *@
-        @*     { *@
-        @*         <link rel="stylesheet" href="@manifest?.SrcMainJs?.CssFile"/> *@
-        @*     } *@
-        @* } *@
+        <script type="module" crossorigin src="/dist/main.js" asp-append-version="true"></script>
+        <link rel="stylesheet" href="/dist/assets/main.css" asp-append-version="true"/>
     </environment>
-
-
 </head>
 <body>
 <header>
@@ -67,15 +60,7 @@
     <!-- Vite dev server -->
     <script type="module" src="http://localhost:3000/src/main.js"></script>
 </environment>
-<environment names="Staging,Production">
-    <script src="/dist/main.js" asp-append-version="true"></script>
-    @* @{ *@
-    @*     if(manifest is not null) *@
-    @*     { *@
-    @*         <script src="@manifest?.SrcMainJs?.JsFile"></script> *@
-    @*     } *@
-    @* } *@
-</environment>
+
 
 </body>
 </html>

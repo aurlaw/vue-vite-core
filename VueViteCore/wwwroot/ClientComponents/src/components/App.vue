@@ -6,13 +6,13 @@ import HelloWorld from './App/HelloWorld.vue'
 </script>
 
 <template>
-    <HelloWorld msg="Hello Vue 3 + Vite + Dotnet 6 MVC">
+    <HelloWorld class="app" msg="Hello Vue 3 + Vite + Dotnet 6 MVC">
       <img alt="Vue logo" src="../../../assets/logo.png" />
     </HelloWorld>
 </template>
 
 <style>
-#app {
+.app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

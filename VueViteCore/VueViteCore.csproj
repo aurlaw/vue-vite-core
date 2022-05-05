@@ -88,7 +88,7 @@
 		<ItemGroup>
 			<DistFiles Include="wwwroot\ClientComponents\dist\**" />
 			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
-				<RelativePath>wwwroot\dist\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+				<RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			</ResolvedFileToPublish>

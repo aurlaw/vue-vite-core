@@ -37,6 +37,14 @@ This will compile the .NET 6 app in release mode, execute npm install and the vi
 Publish from Visual Studio/Rider or CLI
 
 ```
-dotnet publish --c Release
+dotnet publish VueViteCore/VueViteCore.sln  -c Release
 ```
 
+## Docker
+
+```
+cd VueViteCore
+docker build -t aurlaw/vuevitecore:1.0 .
+docker run -d -p 9090:80 aurlaw/vuevitecore:1.0
+
+```
