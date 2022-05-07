@@ -46,6 +46,19 @@ Run Dotnet app via VisualStudio/Rider or CLI
 dotnet run --project VueViteCore/VueViteCore.csproj
 ```
 
+## EF Migrations
+
+To use `dotnet-ef` for your migrations please add the following flags to your command (values assume you are executing from repository root)
+
+* `--project VueViteCore.Business` (optional if in this folder)
+* `--startup-project VueViteCore`
+* `--output-dir Persistence/Migrations`
+
+For example, to add a new migration from the root folder:
+
+`dotnet ef migrations add "SampleMigration" --project VueViteCore.Business --startup-project VueViteCore --output-dir Persistence\Migrations`
+
+dotnet ef migrations add "InitialCreation" --project VueViteCore.Business --startup-project VueViteCore --output-dir Persistence/Migrations
 
 ## Publishing
 

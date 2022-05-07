@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using VueViteCore.Business.Identity;
+using Microsoft.Extensions.Logging;
+// using VueViteCore.Business.Identity;
 using VueViteCore.Business.Persistence;
 
 namespace VueViteCore.Business;
@@ -28,20 +30,12 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
         
-        services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
-        
-        
-        // services
-        //     .AddDefaultIdentity<ApplicationUser>()
+        // services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
         //     .AddRoles<IdentityRole>()
         //     .AddEntityFrameworkStores<ApplicationDbContext>();
-        //
-        // services.AddIdentityServer()
-        //     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
         
-        services.AddTransient<IIdentityService, IdentityService>();
+        
+        // services.AddTransient<IIdentityService, IdentityService>();
 
 
         services.AddAuthentication()
@@ -52,4 +46,63 @@ public static class DependencyInjection
         
         return services;
     }
+    
+    public static async Task  PerformMigrationsIfNecessary(this WebApplication app)
+    {
+        // migrate any database changes on startup (includes initial db creation)
+        using (var scope = app.Services.CreateScope())
+        {
+            try
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                if (dbContext.Database.IsSqlServer())
+                {
+                    await dbContext.Database.MigrateAsync();
+                }
+                
+                // seed 
+                await ApplicationDbContextSeed.SeedSampleDataAsync(dbContext);
+
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
+                logger.LogError(ex, "An error occurred while migrating or seeding the database");
+                throw;
+            }
+        }
+    }
+    
 }
+/*
+        using (var scope = host.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            try
+            {
+                var context = services.GetRequiredService<ApplicationDbContext>();
+
+                if (context.Database.IsSqlServer())
+                {
+                    context.Database.Migrate();
+                }
+
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager, roleManager);
+                await ApplicationDbContextSeed.SeedSampleDataAsync(context);
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+                logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+
+                throw;
+            }
+        }
+ *
+ * 
+ */

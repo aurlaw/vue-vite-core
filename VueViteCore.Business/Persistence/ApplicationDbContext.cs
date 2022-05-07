@@ -1,20 +1,19 @@
 using System.Reflection;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using VueViteCore.Business.Common;
 using VueViteCore.Business.Entities;
-using VueViteCore.Business.Identity;
+// using VueViteCore.Business.Identity;
 
 namespace VueViteCore.Business.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly ICurrentUserService _currentUserService;
+    // private readonly ICurrentUserService _currentUserService;
     
-    public ApplicationDbContext(DbContextOptions options, ICurrentUserService currentUserService) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-        _currentUserService = currentUserService;
+        // _currentUserService = currentUserService;
     }
 
     public DbSet<TodoList> TodoLists => Set<TodoList>();
@@ -35,12 +34,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = _currentUserService?.UserId;
+                    // entry.Entity.CreatedBy = _currentUserService?.UserId;
                     entry.Entity.Created = DateTime.UtcNow;
                     break;
 
                 case EntityState.Modified:
-                    entry.Entity.LastModifiedBy = _currentUserService?.UserId;
+                    // entry.Entity.LastModifiedBy = _currentUserService?.UserId;
                     entry.Entity.LastModified = DateTime.UtcNow;
                     break;
             }
