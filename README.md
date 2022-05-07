@@ -58,7 +58,6 @@ For example, to add a new migration from the root folder:
 
 `dotnet ef migrations add "SampleMigration" --project VueViteCore.Business --startup-project VueViteCore --output-dir Persistence\Migrations`
 
-dotnet ef migrations add "InitialCreation" --project VueViteCore.Business --startup-project VueViteCore --output-dir Persistence/Migrations
 
 ## Publishing
 

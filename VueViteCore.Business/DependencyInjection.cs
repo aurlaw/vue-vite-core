@@ -50,26 +50,26 @@ public static class DependencyInjection
     public static async Task  PerformMigrationsIfNecessary(this WebApplication app)
     {
         // migrate any database changes on startup (includes initial db creation)
-        using (var scope = app.Services.CreateScope())
+        using var scope = app.Services.CreateScope();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
+        try
         {
-            try
+            logger.LogInformation("Perform migration");
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            if (dbContext.Database.IsSqlServer())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                if (dbContext.Database.IsSqlServer())
-                {
-                    await dbContext.Database.MigrateAsync();
-                }
+                await dbContext.Database.MigrateAsync();
+            }
                 
-                // seed 
-                await ApplicationDbContextSeed.SeedSampleDataAsync(dbContext);
+            // seed 
+            logger.LogInformation("Seed data");
+            await ApplicationDbContextSeed.SeedSampleDataAsync(dbContext);
 
-            }
-            catch (Exception ex)
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
-                logger.LogError(ex, "An error occurred while migrating or seeding the database");
-                throw;
-            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while migrating or seeding the database");
+            throw;
         }
     }
     

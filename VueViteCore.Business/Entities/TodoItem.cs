@@ -12,6 +12,7 @@ public class TodoItem : AuditableEntity
 
     public string? Note { get; set; }   
     
+    public bool IsDone { get; set; }
     public TodoList List { get; set; } = null!;
 
 }
