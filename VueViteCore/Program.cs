@@ -4,6 +4,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // // DI
 // builder.Services.AddSingleton<Manifest>();
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// scaffold razor identity UI
+//https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=netcore-cli
+
 
 // Add services to the container.
 builder.Services.AddRouting(x => x.LowercaseUrls = true);
@@ -29,10 +34,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+//app.MapRazorPages();
+
 
 app.Run();
