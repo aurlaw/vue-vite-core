@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=!VueViteCoreDb
+    ports:
+      - "1433:1433"
+    volumes:
+      - "vvcapp:/var/opt/mssql"
+      - "${PWD}/db:/var/backup"
+volumes:
+  vvcapp:

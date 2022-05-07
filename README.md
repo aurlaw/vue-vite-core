@@ -7,8 +7,25 @@ Showcases using vite to build vue components and sass and integrate within a bas
 ## Requirements
 - Node 17+
 - .NET 6 SDK
+- Docker
 
 This demo was built using JetBrains Rider and VSCode
+
+## SQL Server
+
+SQL Server is managed by Docker
+
+Start container
+```
+ docker compose up -d
+```
+
+Stop container
+
+```
+ docker compose down
+```
+
 
 ## Installation
 
