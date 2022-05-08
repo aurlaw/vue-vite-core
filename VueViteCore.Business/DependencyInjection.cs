@@ -12,6 +12,12 @@ namespace VueViteCore.Business;
 
 public static class DependencyInjection
 {
+    /// <summary>
+    /// Add VueCore Business dependencies
+    /// </summary>
+    /// <param name="services">reference to IServiceCollection</param>
+    /// <param name="configuration">reference to configuration</param>
+    /// <returns></returns>
     public static IServiceCollection AddBusiness(this IServiceCollection services, IConfiguration configuration)
     {
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
@@ -37,17 +43,17 @@ public static class DependencyInjection
         
         // services.AddTransient<IIdentityService, IdentityService>();
 
-
-        services.AddAuthentication()
-            .AddIdentityCookies();
-        
-        services.AddAuthorization(options => 
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+        //
+        // services.AddAuthentication()
+        //     .AddIdentityCookies();
+        //
+        // services.AddAuthorization(options => 
+        //     options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
         
         return services;
     }
     
-    public static async Task  PerformMigrationsIfNecessary(this WebApplication app)
+    public static async Task PerformMigrationsIfNecessary(this WebApplication app)
     {
         // migrate any database changes on startup (includes initial db creation)
         using var scope = app.Services.CreateScope();
