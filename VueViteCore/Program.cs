@@ -77,11 +77,3 @@ finally
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
 }
-// var connectionString = builder.Configuration.GetConnectionString("VueViteCoreIdentityDbContextConnection");;
-//
-// builder.Services.AddDbContext<VueViteCoreIdentityDbContext>(options =>
-//     options.UseSqlServer(connectionString));;
-//
-// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//     .AddEntityFrameworkStores<VueViteCoreIdentityDbContext>();;
-//
