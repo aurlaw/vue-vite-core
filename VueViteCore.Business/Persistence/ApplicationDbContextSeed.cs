@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using VueViteCore.Business.Entities;
+using VueViteCore.Business.Identity;
 
 namespace VueViteCore.Business.Persistence;
 
@@ -28,11 +30,7 @@ public static class ApplicationDbContextSeed
             await context.SaveChangesAsync();
         }        
     }
-}
-
-/*
- *
-
+    
     public static async Task SeedDefaultUserAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         var administratorRole = new IdentityRole("Administrator");
@@ -50,7 +48,4 @@ public static class ApplicationDbContextSeed
             await userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
         }
     }
-
-
- * 
- */
+}

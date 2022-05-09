@@ -11,6 +11,8 @@
 		<Content Remove="wwwroot\ClientComponents\**" />
 		<None Remove="wwwroot\ClientComponents\**" />
 		<None Include="wwwroot\ClientComponents\**" Exclude="$(SpaRoot)node_modules\**" />
+		<None Remove="Areas\Identity\Data\**" />
+		<Content Remove="Areas\Identity\Data\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -76,7 +78,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-<!--	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />-->
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
@@ -85,6 +87,7 @@
 	  </PackageReference>
 	  <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.4" />
 	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
 	  <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 	  <PackageReference Include="Serilog.Expressions" Version="3.3.0" />
 	</ItemGroup>
@@ -92,6 +95,11 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\VueViteCore.Business\VueViteCore.Business.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\Identity\Data" />
+	</ItemGroup>
+
 
 
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">

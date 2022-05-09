@@ -1,6 +1,8 @@
 using VueViteCore.Business;
 using VueViteCore.Business.Persistence;
 using Serilog;
+using VueViteCore.Business.Identity;
+using VueViteCore.Services;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -17,7 +19,7 @@ try
     builder.Services.AddBusiness(builder.Configuration);
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// services.AddSingleton<ICurrentUserService, CurrentUserService>();
+    builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
     builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddHealthChecks()
@@ -53,13 +55,13 @@ try
 
     app.UseRouting();
 
-// app.UseAuthentication();
-// app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-//app.MapRazorPages();
+app.MapRazorPages();
 
 // EF migrations
     await app.PerformMigrationsIfNecessary();
@@ -75,4 +77,11 @@ finally
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
 }
-
+// var connectionString = builder.Configuration.GetConnectionString("VueViteCoreIdentityDbContextConnection");;
+//
+// builder.Services.AddDbContext<VueViteCoreIdentityDbContext>(options =>
+//     options.UseSqlServer(connectionString));;
+//
+// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//     .AddEntityFrameworkStores<VueViteCoreIdentityDbContext>();;
+//

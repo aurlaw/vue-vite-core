@@ -40,6 +40,7 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Router">Router</a>
                     </li>
                 </ul>
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>
@@ -61,6 +62,6 @@
     <script type="module" src="http://localhost:3000/src/main.js"></script>
 </environment>
 
-
+@RenderSection("Scripts", required: false)
 </body>
 </html>

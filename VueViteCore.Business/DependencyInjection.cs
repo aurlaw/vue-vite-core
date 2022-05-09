@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using VueViteCore.Business.Identity;
 // using VueViteCore.Business.Identity;
 using VueViteCore.Business.Persistence;
 
@@ -36,19 +37,18 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
         
-        // services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        //     .AddRoles<IdentityRole>()
-        //     .AddEntityFrameworkStores<ApplicationDbContext>();
+        services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
         
         
-        // services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IIdentityService, IdentityService>();
 
-        //
-        // services.AddAuthentication()
-        //     .AddIdentityCookies();
-        //
-        // services.AddAuthorization(options => 
-        //     options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+
+        services.AddAuthentication();
+        
+        services.AddAuthorization(options => 
+            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
         
         return services;
     }
@@ -70,6 +70,11 @@ public static class DependencyInjection
             // seed 
             logger.LogInformation("Seed data");
             await ApplicationDbContextSeed.SeedSampleDataAsync(dbContext);
+            
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            
+            await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager, roleManager);
 
         }
         catch (Exception ex)

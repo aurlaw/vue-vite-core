@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-<!--        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4"/>-->
+      <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
       <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
-<!--      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />-->
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.4" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
@@ -20,16 +20,5 @@
       <Folder Include="Persistence\Migrations" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="Identity\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Identity\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Identity\**" />
-    </ItemGroup>
 
 </Project>
