@@ -6,3 +6,87 @@
 <div class="text-center">
     <div id="h_Contact" data-msg="Contact Component" class="__vue-root"></div>
 </div>
+
+<div>
+    UPLOAD
+    <form>
+        <div class="dropzone dropzone-previews" id="uploadFiles">
+            <div class="dz-message" data-dz-message><span>Upload Image</span></div>
+
+        </div>
+        <div>
+            <img id="img"/>
+        </div>
+        @* <button id="uploadBtn" class="btn btn-outline-primary">Upload</button> *@
+    </form>
+    
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
+
+    <script src="/js/signalr.min.js"></script>
+    <script>
+        var hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/uploadHub")
+            .withAutomaticReconnect()
+            .build();
+        hubConnection.on("SendReceive", function(uploadedUrl) {
+            console.log('SendReceive', uploadedUrl);
+            document.getElementById("img").src = uploadedUrl;
+        });
+        hubConnection.on("SendProgress", function(message) {
+            console.log('SendProgress', message);
+        });
+        hubConnection.on("SendError", function(error) {
+            console.log('SendError', error);
+        });
+
+        function initHubConn() {
+            hubConnection.start().then(function() {
+                console.log('started hub connection...');
+                  hubConnection.invoke("Initialize", "MyUserId").catch(function(err) {
+                        return console.error('Initialize', err.toString());
+                    });                
+            })
+            .catch(function (err) {
+                return console.error('connectHub', err.toString());
+            });
+        }
+        
+        Dropzone.autoDiscover = false;
+        let myDropzone = new Dropzone("div#uploadFiles", 
+        { 
+            url: "/api/upload",
+            method: "POST",
+            maxFilesize: 4, // MB
+            maxFiles: 1,
+            acceptedFiles: "image/*",
+            autoProcessQueue: true,
+            thumbnailWidth: 150, // px
+            thumbnailHeight: 150,
+            addRemoveLinks: true,
+        });
+        myDropzone.on("processing", function (file) {
+            console.log('send file');
+            initHubConn();
+            // myDropzone.processQueue();
+        });
+        myDropzone.on("success", function (file, response) {
+            // console.log("success", file);
+            console.log("success", response);
+        });
+        myDropzone.on("error", function (file, message) {
+            console.log("error", message);
+            alert(message);
+        });
+        
+        // //uploadBtn
+        // document.getElementById("uploadBtn").onclick = function(e){
+        //     e.preventDefault();
+        //     console.log("send");
+        //     myDropzone.processQueue();
+        // }
+    </script>
+}

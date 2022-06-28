@@ -3,6 +3,10 @@ using VueViteCore.Business.Persistence;
 using Serilog;
 using VueViteCore.Business.Identity;
 using VueViteCore.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using VueViteCore.Hubs;
+using VueViteCore.Services.Hosted;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -25,6 +29,14 @@ try
     builder.Services.AddHealthChecks()
         .AddDbContextCheck<ApplicationDbContext>();
 
+    builder.Services.AddSingleton<IBackgroundTaskQueue>(ctx =>
+    {
+        if (!int.TryParse(builder.Configuration["QueueCapacity"], out var queueCapacity))
+            queueCapacity = 100;
+        return new BackgroundTaskQueue(queueCapacity);
+    });
+    builder.Services.AddHostedService<QueuedHostedService>();
+ 
 // scaffold razor identity UI
 //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=netcore-cli
 
@@ -38,6 +50,7 @@ try
         // allows us to change razor views without recompile
         mvcBuilder.AddRazorRuntimeCompilation();
     }
+    builder.Services.AddSignalR();
 
     var app = builder.Build();
 
@@ -62,6 +75,7 @@ app.UseAuthorization();
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+app.MapHub<UploadHub>("/uploadHub");
 
 // EF migrations
     await app.PerformMigrationsIfNecessary();

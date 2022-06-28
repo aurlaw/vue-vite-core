@@ -465,3 +465,6 @@ $RECYCLE.BIN/
 ## Visual Studio Code
 ##
 .vscode/*
+
+
+VueViteCore/wwwroot/output
