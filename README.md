@@ -60,6 +60,13 @@ For example, to add a new migration from the root folder:
 
 dotnet ef migrations add "CreateIdentitySchema" --project VueViteCore.Business --startup-project VueViteCore --output-dir Persistence\Migrations
 
+## Azure Storage
+
+```
+dotnet user-secrets init
+dotnet user-secrets set "AzureStorage:ConnectionString" "STORAGE CONNECTION STRING"
+```
+
 
 ## Publishing
 
@@ -79,3 +86,6 @@ docker build -t aurlaw/vuevitecore:1.0 .
 docker run -d -p 9090:80 aurlaw/vuevitecore:1.0
 
 ```
+
+
+

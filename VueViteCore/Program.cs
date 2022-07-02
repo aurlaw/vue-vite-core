@@ -18,6 +18,9 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .WriteTo.Console()
+        .ReadFrom.Configuration(ctx.Configuration));    
 // DI
 // builder.Services.AddSingleton<Manifest>();
     builder.Services.AddBusiness(builder.Configuration);
@@ -36,6 +39,7 @@ try
         return new BackgroundTaskQueue(queueCapacity);
     });
     builder.Services.AddHostedService<QueuedHostedService>();
+    builder.Services.AddHostedService<StorageQueueHostedService>();
  
 // scaffold razor identity UI
 //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=netcore-cli
