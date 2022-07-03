@@ -1,0 +1,47 @@
+@model EditorViewModel
+@{
+    ViewData["Title"] = "Editor";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="my-1" data-editable data-name="into-content">
+    @if (Model.Regions.ContainsKey("into-content"))
+    {
+        @Html.Raw(Model.Regions["into-content"]) 
+    }
+    else
+    {
+        <h2>Getting started</h2>
+        <p class="page__opening">The ContentTools editor can be added to any HTML page in a few simple steps. Here's how...</p>
+    }
+</div>
+<div class="my-1" data-editable data-name="main-content">
+    @if (Model.Regions.ContainsKey("main-content"))
+    {
+        @Html.Raw(Model.Regions["main-content"]) 
+    }
+    else
+    {
+        <h3>What are you waiting for?</h3>
+        <p>As soon as you've clicked the pencil icon the page will be editable and two new elements will appear; the <b>toolbox</b>&nbsp;and the <b>inspector bar</b>. The toolbox by default will appear in the upper left corner of the page, but it can be dragged to wherever you like. The inspector bar will appear fixed to the bottom of the page (it will be empty until an element on the page is selected).</p>
+        <p>
+            Other than typing, there are two ways to add new content to the page; pressing the return key while editing a section of text (except pre-formatted text) or using one of the tools in the toolbox, for example to insert an image, video, table, etc.
+        </p>
+        <p>
+            Some tools can also convert content, for example selecting a paragraph of text and clicking the list tool will convert the paragraph to a new list.
+        </p>
+        <p class="note">
+            Pre-formatted blocks of text can be converted back to standard text using the paragraph tool, however if you have a pre-formatted section of text and want to add a new paragraph after it you can hold down the ctrl key (command on Apple) whilst clicking the paragraph tool to achieve this.
+        </p>
+    }
+</div>
+
+@section Head {
+    <link href="/js/contenttools/content-tools.min.css" type="text/css" rel="stylesheet"/>
+    <meta name="editor" content="@Model.Page"/>
+}
+@section Scripts
+{
+    <script src="/js/contenttools/content-tools.min.js"></script>
+    <script src="/js/editor.js"></script>
+}

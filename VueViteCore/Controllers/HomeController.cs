@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
+using VueViteCore.Business.Entities;
 using VueViteCore.Business.Persistence;
 using VueViteCore.Hubs;
 using VueViteCore.Models;
@@ -15,14 +16,14 @@ namespace VueViteCore.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly ApplicationDbContext _applicationDb;
+    private readonly IApplicationDbContext _applicationDb;
     private readonly IBackgroundTaskQueue _taskQueue;
     private readonly IHubContext<UploadHub, IUploadHubClient> _hubContext;
     private readonly IWebHostEnvironment _environment;
 
     public HomeController(
         ILogger<HomeController> logger, 
-        ApplicationDbContext applicationDb, 
+        IApplicationDbContext applicationDb, 
         IBackgroundTaskQueue taskQueue, 
         IHubContext<UploadHub, IUploadHubClient> hubContext, IWebHostEnvironment environment)
     {
@@ -50,6 +51,23 @@ public class HomeController : Controller
     {
         return View();
     }
+    public async Task<IActionResult> Editor()
+    {
+        
+        var model = new EditorViewModel
+        {
+            Page  = "editor_page"
+        };
+        var pageRegion = await _applicationDb.PageRegions
+            .Where(p => p.Page == model.Page)
+            .ToListAsync();
+        foreach (var region in pageRegion)
+        {
+            model.Regions.Add(region.Region, region.Content);
+        }
+        
+        return View(model);
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
@@ -64,6 +82,57 @@ public class HomeController : Controller
         return Ok(todos);
     }
 
+    [HttpPost("/api/savepage")]
+    public async Task<IActionResult> SavePage([FromForm]EditorViewModel? model, CancellationToken token)
+    {
+        if (model is null)
+        {
+            _logger.LogInformation("No data saved");
+        }
+        else
+        {
+            _logger.LogInformation("Page editor: {Page}", model.Page);
+            foreach (var modelRegion in model.Regions)
+            {
+                _logger.LogInformation("Region: {@ModelRegion}", modelRegion);
+            }
+
+            await SavePageContent(model, token);
+        }
+
+        return NoContent();
+    }
+
+    private async Task SavePageContent(EditorViewModel pageRegion, CancellationToken token = default)
+    {
+        foreach (var data in pageRegion.Regions)
+        {
+
+            var entity = await _applicationDb.PageRegions.FirstOrDefaultAsync(p =>
+                p.Page == pageRegion.Page && p.Region == data.Key, token);
+            if (entity is null)
+            {
+                entity = new PageRegion
+                {
+                    Page = pageRegion.Page,
+                    Region = data.Key,
+                    Created = DateTime.UtcNow
+                };
+                _applicationDb.PageRegions.Add(entity);
+            }
+            else
+            {
+                entity.Modified = DateTime.UtcNow;
+            }
+
+            entity.Content = data.Value;
+
+            await _applicationDb.SaveChangesAsync(token);
+
+        }
+    }
+    
+    
     [HttpPost("/api/upload")]
     [RequestFormLimits(MultipartBodyLengthLimit = 150000000)]
     [RequestSizeLimit(150000000)]
@@ -144,4 +213,6 @@ public class HomeController : Controller
 
         return (newWidth, newHeight);
     }
+    
+    
 }

@@ -25,7 +25,7 @@ public static class QueueMessageExtensions
         MissingMemberHandling missingMemberHandling = MissingMemberHandling.Error;
         if (ignoreMissingMembersInObject)
             missingMemberHandling = MissingMemberHandling.Ignore;
-        deserializedObject = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings { MissingMemberHandling = missingMemberHandling, });
+        deserializedObject = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings { MissingMemberHandling = missingMemberHandling, }) ?? throw new InvalidOperationException();
         return deserializedObject;
     }    
 }
