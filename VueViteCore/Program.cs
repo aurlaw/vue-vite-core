@@ -5,7 +5,9 @@ using VueViteCore.Business.Identity;
 using VueViteCore.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using VueViteCore.Business.Common.Interfaces;
 using VueViteCore.Hubs;
+using VueViteCore.Models;
 using VueViteCore.Services.Hosted;
 
 Log.Logger = new LoggerConfiguration()
@@ -40,7 +42,17 @@ try
     });
     builder.Services.AddHostedService<QueuedHostedService>();
     //builder.Services.AddHostedService<StorageQueueHostedService>();
- 
+
+    // storage
+    builder.Services.AddOptions<AzureStorageSettings>()
+        .Configure<IConfiguration>((settings, configuration) =>
+        {
+            configuration.GetSection("AzureStorage").Bind(settings);
+        });
+    builder.Services.AddSingleton<IStorageService, StorageService>();
+
+    
+    
 // scaffold razor identity UI
 //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=netcore-cli
 

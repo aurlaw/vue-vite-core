@@ -86,7 +86,3 @@ docker build -t aurlaw/vuevitecore:1.0 .
 docker run -d -p 9090:80 aurlaw/vuevitecore:1.0
 
 ```
-
-
-
-dotnet ef migrations add "AddPageRegion" --project VueViteCore.Business --startup-project VueViteCore --output-dir Persistence\Migrations

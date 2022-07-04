@@ -1,10 +1,13 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
+using VueViteCore.Business.Common.Interfaces;
 using VueViteCore.Business.Entities;
 using VueViteCore.Business.Persistence;
 using VueViteCore.Hubs;
@@ -20,18 +23,25 @@ public class HomeController : Controller
     private readonly IBackgroundTaskQueue _taskQueue;
     private readonly IHubContext<UploadHub, IUploadHubClient> _hubContext;
     private readonly IWebHostEnvironment _environment;
+    private readonly IStorageService _storageService;
+    private readonly AzureStorageSettings _storageSettings;
 
     public HomeController(
         ILogger<HomeController> logger, 
         IApplicationDbContext applicationDb, 
         IBackgroundTaskQueue taskQueue, 
-        IHubContext<UploadHub, IUploadHubClient> hubContext, IWebHostEnvironment environment)
+        IHubContext<UploadHub, IUploadHubClient> hubContext, 
+        IWebHostEnvironment environment, 
+        IStorageService storageService, 
+        IOptions<AzureStorageSettings> storageSettings)
     {
         _logger = logger;
         _applicationDb = applicationDb;
         _taskQueue = taskQueue;
         _hubContext = hubContext;
         _environment = environment;
+        _storageService = storageService;
+        _storageSettings = storageSettings.Value;
     }
 
     public IActionResult Index()
@@ -65,7 +75,17 @@ public class HomeController : Controller
         {
             model.Regions.Add(region.Region, region.Content);
         }
-        
+        //
+        if (!Request.Cookies.ContainsKey("sastoken"))
+        {
+            var storage = await _storageService.GenerateSASToken(_storageSettings.SiteContainer);
+            var expires = DateTimeOffset.FromUnixTimeSeconds(storage.TokenExpiration);
+            Response.Cookies.Append("sastoken", JsonSerializer.Serialize(storage), new CookieOptions()
+            {
+                Expires = expires
+            });
+            
+        }
         return View(model);
     }
 
