@@ -3,6 +3,7 @@ using VueViteCore.Business.Common;
 using VueViteCore.Business.Common.Interfaces;
 using VueViteCore.Models;
 using Azure.Storage;
+using Azure.Storage.Blobs;
 using Azure.Storage.Sas;
 
 namespace VueViteCore.Services;
@@ -45,4 +46,11 @@ public class StorageService : IStorageService
         );
         return Task.FromResult(response);        
     }
+
+    private Task<BlobContainerClient> GetContainerAsync(string container)
+    {
+        var blobServiceClient = new BlobServiceClient(_storageSettings.ConnectionString);
+        return Task.FromResult(blobServiceClient.GetBlobContainerClient(container));
+    }
+
 }

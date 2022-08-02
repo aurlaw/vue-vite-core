@@ -182,14 +182,14 @@ window.addEventListener('load', function() {
 
             // replace image
             // TODO: launch modal to choose existing image
-            var image = new ContentEdit.Image({src: 'https://codemicsolutions.blob.core.windows.net/site-media/ventilator-g3f3209fdb_1920.jpg', width: 1920, height: 1279, 'data-ce-max-width': 1920});
-            
-            
-            var imgTool = ContentTools.ToolShelf.fetch('image');// get image tool
-            var insertAt = imgTool._insertAt(elm);// get position for insertion
-            insertAt[0].parent().attach(image, insertAt[1]);// adds new image
-            image.focus();
-            insertAt[0].parent().detach(elm);// removed old image
+            // var image = new ContentEdit.Image({src: 'https://codemicsolutions.blob.core.windows.net/site-media/ventilator-g3f3209fdb_1920.jpg', width: 1920, height: 1279, 'data-ce-max-width': 1920});
+            //
+            //
+            // var imgTool = ContentTools.ToolShelf.fetch('image');// get image tool
+            // var insertAt = imgTool._insertAt(elm);// get position for insertion
+            // insertAt[0].parent().attach(image, insertAt[1]);// adds new image
+            // image.focus();
+            // insertAt[0].parent().detach(elm);// removed old image
             
 
             

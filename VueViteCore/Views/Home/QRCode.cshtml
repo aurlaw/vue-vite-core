@@ -1,0 +1,37 @@
+@model QrViewModel
+@{
+    ViewData["Title"] = "QR Code";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col">
+        <form asp-controller="Home" asp-action="QrCode" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <input asp-for="Link" class="form-control"/>
+                <label asp-for="Link"></label>
+                <span asp-validation-for="Link" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="LogoPath" class="form-control"/>
+                <label asp-for="LogoPath"></label>
+                <span asp-validation-for="LogoPath" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="DarkColor" class="form-control" type="color" value="#000000"/>
+                <label asp-for="DarkColor"></label>
+                <span asp-validation-for="DarkColor" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="LightColor" class="form-control" type="color" value="#ff0000"/>
+                <label asp-for="LightColor"></label>
+                <span asp-validation-for="LightColor" class="text-danger"></span>
+            </div>
+            <button class="btn btn-primary" type="submit">Generate</button>
+        </form>
+    </div>
+    <div class="col">
+        @Model.QrCode
+    </div>
+</div>

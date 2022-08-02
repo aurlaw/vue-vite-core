@@ -28,50 +28,24 @@ public class StorageQueueHostedService : IHostedService, IDisposable
 
         return Task.CompletedTask;
     }
-    private void DoWork(object? state)
+    private async void DoWork(object? state)
     {
         _logger.LogInformation("Timed Hosted Service is working: {QueueName}", _settings.QueueName);
-        Task.Run(async () =>
-        {
-            if (await _queueClient.ExistsAsync())
-            {
-                //https://briancaos.wordpress.com/2021/06/16/net-core-queuemessage-json-to-typed-object-using-azure-storage-queues/
-                QueueProperties properties = await _queueClient.GetPropertiesAsync();
-                _logger.LogInformation("Message Count: {ApproximateMessagesCount}", properties.ApproximateMessagesCount);
-                if (properties.ApproximateMessagesCount > 0)
-                {
-                    QueueMessage[] retrievedMessage = await _queueClient.ReceiveMessagesAsync(1);    
-                    _logger.LogInformation("Messages Length: {Length}", retrievedMessage.Length);
-                    var result = retrievedMessage[0].As<MediaResult>();                    
-                    _logger.LogInformation("Message: {@Result} {Video}", result, result.Video);
-                }
-            }
-        });
+        //https://briancaos.wordpress.com/2021/06/16/net-core-queuemessage-json-to-typed-object-using-azure-storage-queues/
+        if (!await _queueClient.ExistsAsync()) return;
+
+        QueueProperties properties = await _queueClient.GetPropertiesAsync();
+        _logger.LogInformation("Message Count: {ApproximateMessagesCount}", properties.ApproximateMessagesCount);
+        
+        if (properties.ApproximateMessagesCount <= 0) return;
+        
+        QueueMessage[] retrievedMessage = await _queueClient.ReceiveMessagesAsync(1);    
+        _logger.LogInformation("Messages Length: {Length}", retrievedMessage.Length);
+        var result = retrievedMessage[0].As<MediaResult>();                    
+        _logger.LogInformation("Message: {@Result} {Video}", result, result.Video);
+
     }
     
-    
-    /*
-     *static async Task<string> RetrieveNextMessageAsync(QueueClient theQueue)
-{
-    if (await theQueue.ExistsAsync())
-    {
-        QueueProperties properties = await theQueue.GetPropertiesAsync();
-
-        if (properties.ApproximateMessagesCount > 0)
-        {
-            QueueMessage[] retrievedMessage = await theQueue.ReceiveMessagesAsync(1);
-            string theMessage = retrievedMessage[0].Body.ToString();
-            await theQueue.DeleteMessageAsync(retrievedMessage[0].MessageId, retrievedMessage[0].PopReceipt);
-            return theMessage;
-        }
-
-        return null;
-    }
-
-    return null;
-}
-     * 
-     */
     
     public Task StopAsync(CancellationToken cancellationToken)
     {

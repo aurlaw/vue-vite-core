@@ -1,28 +1,13 @@
-@using VueViteCore.Business.Common
-@model EditorViewModel
 @{
-    ViewData["Title"] = "Editor";
+    ViewData["Title"] = "GrapeJS Editor";
 }
 <h1>@ViewData["Title"]</h1>
 
-<div class="my-1" data-editable data-name="into-content">
-    @if (Model.Regions.ContainsKey("into-content"))
-    {
-        @Html.Raw(Model.Regions["into-content"]) 
-    }
-    else
-    {
+<div id="gjs" class="grape-editor">
+    <div class="row">
         <h2>Getting started</h2>
-        <p class="page__opening">The ContentTools editor can be added to any HTML page in a few simple steps. Here's how...</p>
-    }
-</div>
-<div class="my-1" data-editable data-name="main-content">
-    @if (Model.Regions.ContainsKey("main-content"))
-    {
-        @Html.Raw(Model.Regions["main-content"]) 
-    }
-    else
-    {
+        <p>The editor can be added to any HTML page in a few simple steps. Here's how...</p>
+        
         <h3>What are you waiting for?</h3>
         <p>As soon as you've clicked the pencil icon the page will be editable and two new elements will appear; the <b>toolbox</b>&nbsp;and the <b>inspector bar</b>. The toolbox by default will appear in the upper left corner of the page, but it can be dragged to wherever you like. The inspector bar will appear fixed to the bottom of the page (it will be empty until an element on the page is selected).</p>
         <p>
@@ -34,53 +19,36 @@
         <p class="note">
             Pre-formatted blocks of text can be converted back to standard text using the paragraph tool, however if you have a pre-formatted section of text and want to add a new paragraph after it you can hold down the ctrl key (command on Apple) whilst clicking the paragraph tool to achieve this.
         </p>
-    }
+    </div>
     
-</div>
-
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card" >
-            <div class="card-body" data-editable data-name="card-one">
-                @if (Model.Regions.ContainsKey("card-one"))
-                {
-                    @Html.Raw(Model.Regions["card-one"]) 
-                }
-                else
-                {
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card" >
+                <div class="card-body">
                     <h5 class="card-title">First Special title treatment</h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                     <p><a href="#" class="btn btn-primary">Go somewhere</a></p>
-                }
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6" >
-        <div class="card">
-            <div class="card-body" data-editable data-name="card-two" >
-                @if (Model.Regions.ContainsKey("card-two"))
-                {
-                    @Html.Raw(Model.Regions["card-two"]) 
-                }
-                else
-                {
+        <div class="col-sm-6" >
+            <div class="card">
+                <div class="card-body">
                     <h5 class="card-title">First Special title treatment</h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                     <p><a href="#" class="btn btn-primary">Go somewhere</a></p>
-                }
+                </div>
             </div>
         </div>
     </div>
+
 </div>
-
-
 @section Head {
-    <link href="/js/contenttools/content-tools.min.css" type="text/css" rel="stylesheet"/>
-    <meta name="editor" content="@Model.Page"/>
+<link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css">
 }
 @section Scripts
 {
-    <script src="/js/contenttools/content-tools.min.js"></script>
-    <script src="/js/editor.js"></script>
+    <script src="//unpkg.com/grapesjs"></script>    
+    <script src="/js/grapeEditor.js"></script>
+
 }

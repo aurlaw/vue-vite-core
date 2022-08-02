@@ -88,7 +88,31 @@ public class HomeController : Controller
         }
         return View(model);
     }
+    public IActionResult GrapeEditor()
+    {
+        return View();
+    }
 
+    public IActionResult QrCode()
+    {
+        var model = new QrViewModel();
+        return View(model);
+    }
+    [HttpPost]
+    public IActionResult QrCode(QrViewModel model)
+    {
+        var param = new
+        {
+            name = "mycode",
+            model.Link,
+            model.LogoPath
+        };
+        var qrCodeUrl = Url.ActionLink(nameof(CodeController.Index), "Code", param, protocol: Request.Scheme);
+        
+        model.QrCode = qrCodeUrl;
+        return View(model);
+    }
+    
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

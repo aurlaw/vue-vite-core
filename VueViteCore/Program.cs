@@ -41,7 +41,7 @@ try
         return new BackgroundTaskQueue(queueCapacity);
     });
     builder.Services.AddHostedService<QueuedHostedService>();
-    //builder.Services.AddHostedService<StorageQueueHostedService>();
+    builder.Services.AddHostedService<StorageQueueHostedService>();
 
     // storage
     builder.Services.AddOptions<AzureStorageSettings>()
@@ -50,6 +50,8 @@ try
             configuration.GetSection("AzureStorage").Bind(settings);
         });
     builder.Services.AddSingleton<IStorageService, StorageService>();
+
+    builder.Services.AddSingleton<QrGenerator>();
 
     
     
