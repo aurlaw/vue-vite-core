@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Video";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="text-center">
+    <div class="row">
+        <div class="col-10">
+                    <video
+                    id="entry-video"
+                    class="video-js vjs-16-9"
+                    controls
+                    preload="auto"
+                    poster="https://codemicsolutions.blob.core.windows.net/asset-01f61334-3ba4-4278-9cc7-08af87f8fa33/Thumbnail000001.jpg"
+                    data-setup='{"fluid": true, "seek": true}'
+                    >
+                    <source src="https://codemicsolutions.blob.core.windows.net/asset-01f61334-3ba4-4278-9cc7-08af87f8fa33/IMG_0495_1280x720_4500.mp4" type="video/mp4" />
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a
+                        web browser that
+                        <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a
+                        >
+                    </p>
+                    </video>    
+        </div>
+    </div>
+
+    
+</div>
+
+
+@section Head {
+    <link href="https://vjs.zencdn.net/7.19.2/video-js.css" rel="stylesheet" />
+
+}
+
+@section Scripts {
+    <script src="https://vjs.zencdn.net/7.19.2/video.min.js"></script>
+
+    <script>
+(function() {
+    let pctEvent = {};
+    const percentsPlayedInterval = 10;
+    const  reset = () => {
+        pctEvent = {};
+        
+    }
+    const sentEvent = (key, eventName) => {
+      if (!(key in pctEvent)) {
+        pctEvent[key] = true;
+        console.log(eventName);
+      }
+    };
+    
+      const video = videojs("#entry-video");
+      video.on('timeupdate', () => { 
+          const current = Math.round(video.currentTime());
+          const duration = Math.round(video.duration());
+          if (current <=0 || duration <= 0)
+              return;
+          const pct = Math.round(current / duration * 100);
+          for (let i=0; i <= 100; i += percentsPlayedInterval) {
+            if (pct >= i && !(pct in pctEvent)) {
+                sentEvent(i, "Event for " + i);
+            }
+          }
+      });
+      video.on('ended', () => {
+       reset();
+      });
+
+})();    
+  
+  </script>
+
+
+}

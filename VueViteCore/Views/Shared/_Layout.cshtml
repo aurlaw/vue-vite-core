@@ -15,8 +15,8 @@
         <script type="module" crossorigin src="/dist/main.js" asp-append-version="true"></script>
         <link rel="stylesheet" href="/dist/assets/main.css" asp-append-version="true"/>
     </environment>
-    @RenderSection("Head", required: false)
-    
+    @await RenderSectionAsync("Head", required: false)
+
 </head>
 <body>
 <header>
@@ -50,6 +50,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="QrCode">QR Code</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Video">Video</a>
+                    </li>
                     
                 </ul>
                 <partial name="_LoginPartial" />
@@ -74,6 +77,6 @@
     <script type="module" src="http://localhost:3000/src/main.js"></script>
 </environment>
 
-@RenderSection("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

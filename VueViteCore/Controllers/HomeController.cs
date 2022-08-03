@@ -112,7 +112,11 @@ public class HomeController : Controller
         model.QrCode = qrCodeUrl;
         return View(model);
     }
-    
+
+    public IActionResult Video()
+    {
+        return View();
+    }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

@@ -40,9 +40,13 @@ public class StorageQueueHostedService : IHostedService, IDisposable
         if (properties.ApproximateMessagesCount <= 0) return;
         
         QueueMessage[] retrievedMessage = await _queueClient.ReceiveMessagesAsync(1);    
-        _logger.LogInformation("Messages Length: {Length}", retrievedMessage.Length);
-        var result = retrievedMessage[0].As<MediaResult>();                    
-        _logger.LogInformation("Message: {@Result} {Video}", result, result.Video);
+        if(retrievedMessage.Length > 0) 
+        {
+            _logger.LogInformation("Messages Length: {Length}", retrievedMessage.Length);
+            var result = retrievedMessage[0].As<MediaResult>();                    
+            _logger.LogInformation("Message: {@Result} {Video}", result, result.Video);
+
+        }
 
     }
     
