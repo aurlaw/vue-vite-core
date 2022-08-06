@@ -10,6 +10,8 @@ public interface IApplicationDbContext
     DbSet<TodoItem> TodoItems { get; }
     
     DbSet<PageRegion> PageRegions { get; }
+    
+    DbSet<SubmissionEntry> SubmissionEntries { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

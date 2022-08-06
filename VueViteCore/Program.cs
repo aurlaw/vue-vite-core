@@ -52,6 +52,7 @@ try
     builder.Services.AddSingleton<IStorageService, StorageService>();
 
     builder.Services.AddSingleton<QrGenerator>();
+    builder.Services.AddSingleton<ExportService>();
 
     
     

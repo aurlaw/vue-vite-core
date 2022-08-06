@@ -23,6 +23,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
     public DbSet<PageRegion> PageRegions => Set<PageRegion>();
+    public DbSet<SubmissionEntry> SubmissionEntries => Set<SubmissionEntry>();
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -43,8 +43,10 @@ public class StorageQueueHostedService : IHostedService, IDisposable
         if(retrievedMessage.Length > 0) 
         {
             _logger.LogInformation("Messages Length: {Length}", retrievedMessage.Length);
-            var result = retrievedMessage[0].As<MediaResult>();                    
+            var message = retrievedMessage[0];
+            var result = message.As<MediaResult>();                    
             _logger.LogInformation("Message: {@Result} {Video}", result, result.Video);
+            await _queueClient.DeleteMessageAsync(message.MessageId, message.PopReceipt);
 
         }
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace VueViteCore.Business.PersistenceMigrations
+namespace VueViteCore.Business.Persistence.Migrations
 {
     public partial class AddPageRegion : Migration
     {

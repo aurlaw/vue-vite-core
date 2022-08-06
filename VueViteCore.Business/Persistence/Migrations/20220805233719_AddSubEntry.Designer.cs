@@ -9,11 +9,11 @@ using VueViteCore.Business.Persistence;
 
 #nullable disable
 
-namespace VueViteCore.Business.PersistenceMigrations
+namespace VueViteCore.Business.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220703005558_AddPageRegion")]
-    partial class AddPageRegion
+    [Migration("20220805233719_AddSubEntry")]
+    partial class AddSubEntry
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -196,6 +196,38 @@ namespace VueViteCore.Business.PersistenceMigrations
                         .IsUnique();
 
                     b.ToTable("PageRegions");
+                });
+
+            modelBuilder.Entity("VueViteCore.Business.Entities.SubmissionEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ValueOne")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("ValueThree")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("ValueTwo")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubmissionEntries");
                 });
 
             modelBuilder.Entity("VueViteCore.Business.Entities.TodoItem", b =>

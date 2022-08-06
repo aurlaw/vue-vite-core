@@ -1,5 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +16,8 @@ using VueViteCore.Business.Entities;
 using VueViteCore.Business.Persistence;
 using VueViteCore.Hubs;
 using VueViteCore.Models;
+using VueViteCore.Models.Maps;
+using VueViteCore.Services;
 using VueViteCore.Services.Hosted;
 
 namespace VueViteCore.Controllers;
@@ -25,6 +31,7 @@ public class HomeController : Controller
     private readonly IWebHostEnvironment _environment;
     private readonly IStorageService _storageService;
     private readonly AzureStorageSettings _storageSettings;
+    private readonly ExportService _exportService;
 
     public HomeController(
         ILogger<HomeController> logger, 
@@ -33,7 +40,8 @@ public class HomeController : Controller
         IHubContext<UploadHub, IUploadHubClient> hubContext, 
         IWebHostEnvironment environment, 
         IStorageService storageService, 
-        IOptions<AzureStorageSettings> storageSettings)
+        IOptions<AzureStorageSettings> storageSettings, 
+        ExportService exportService)
     {
         _logger = logger;
         _applicationDb = applicationDb;
@@ -41,6 +49,7 @@ public class HomeController : Controller
         _hubContext = hubContext;
         _environment = environment;
         _storageService = storageService;
+        _exportService = exportService;
         _storageSettings = storageSettings.Value;
     }
 
@@ -88,10 +97,43 @@ public class HomeController : Controller
         }
         return View(model);
     }
-    public IActionResult GrapeEditor()
+    public IActionResult Csv()
     {
         return View();
     }
+    public async Task<IActionResult> DownloadCsv(CancellationToken cancellationToken)
+    {
+        var entries = await GetSubmissions(cancellationToken);
+        var result = await _exportService.GetExportedStream<SubmissionEntry, SubmissionEntryMap>(entries,
+            ExportType.Csv, "entry_submission_", cancellationToken);
+
+        return File(result.Stream, result.ContentType, result.FileName);
+
+
+    }
+    public async Task<IActionResult> DownloadXlsx(CancellationToken cancellationToken)
+    {
+        var entries = await GetSubmissions(cancellationToken);
+        var result = await _exportService.GetExportedStream<SubmissionEntry, SubmissionEntryMap>(entries,
+            ExportType.Excel, "entry_submission_", cancellationToken);
+
+        return File(result.Stream, result.ContentType, result.FileName);
+
+    }
+
+    private async Task<IList<SubmissionEntry>> GetSubmissions(CancellationToken cancellationToken)
+    {
+        return await _applicationDb
+            .SubmissionEntries
+            .ToListAsync(cancellationToken);
+    }
+
+
+
+    // public IActionResult GrapeEditor()
+    // {
+    //     return View();
+    // }
 
     public IActionResult QrCode()
     {
