@@ -147,7 +147,8 @@ public class HomeController : Controller
         {
             name = "mycode",
             model.Link,
-            model.LogoPath
+            model.LogoPath,
+            model.DarkColor
         };
         var qrCodeUrl = Url.ActionLink(nameof(CodeController.Index), "Code", param, protocol: Request.Scheme);
         

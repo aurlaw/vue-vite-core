@@ -15,9 +15,9 @@ public class CodeController : Controller
     }
 
     // GET /code?name=&link=&logoPath
-    public async Task Index([FromQuery] string name, string link, string? logoPath)
+    public async Task Index([FromQuery] string name, string link, string? logoPath, string? darkColor)
     {
-        var (imgBytes, contentType) = await _qrGenerator.GenerateFromLinkV2(link, logoPath);
+        var (imgBytes, contentType) = await _qrGenerator.GenerateFromLinkV2(link, logoPath, darkColor);
         Response.ContentType = contentType;
         Response.ContentLength = imgBytes.Length;
         await Response.Body.WriteAsync(imgBytes);

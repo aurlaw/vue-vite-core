@@ -8,6 +8,7 @@ using ZXing;
 using ZXing.QrCode;
 using ZXing.QrCode.Internal;
 using ZXing.Rendering;
+using Color = DocumentFormat.OpenXml.Wordprocessing.Color;
 
 namespace VueViteCore.Services;
 
@@ -30,16 +31,20 @@ public class QrGenerator
         
         var qrGenerator = new QRCodeGenerator();
         var qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
+        
         var qrCode = new PngByteQRCode(qrCodeData);
         byte[]? qrCodeAsBytes;
-        if (attribute is null)
-        {
-            qrCodeAsBytes = qrCode.GetGraphic(20);
-        }
-        else
-        {
-            qrCodeAsBytes = qrCode.GetGraphic(20);
-        }
+        qrCodeAsBytes = qrCode.GetGraphic(20);
+
+        
+        // if (attribute is null)
+        // {
+        //     qrCodeAsBytes = qrCode.GetGraphic(20);
+        // }
+        // else
+        // {
+        //     qrCodeAsBytes = qrCode.GetGraphic(20);
+        // }
         //Bitmap qrCodeImage = qrCode.GetGraphic(20, "#000ff0", "#0ff000");
 
         return Task.FromResult((qrCodeAsBytes, "image/png"));
@@ -52,8 +57,14 @@ public class QrGenerator
     }
 
 
-    public async Task<(byte[], string)>  GenerateFromLinkV2(string link, string? logoPath)
+    public async Task<(byte[], string)>  GenerateFromLinkV2(string link, string? logoPath, string? darkColor)
     {
+        var darkColorInt = System.Drawing.Color.Black.ToArgb();
+        var convertedColor = darkColor.ConvertToBGR();
+        if (convertedColor is not null)
+        {
+            darkColorInt = convertedColor.Value;
+        }
         var qrCodeWriter = new BarcodeWriterPixelData
         {
             Format = BarcodeFormat.QR_CODE,
@@ -64,15 +75,15 @@ public class QrGenerator
                 Margin = 0
             },
             Renderer = new PixelDataRenderer {
-                Foreground = new PixelDataRenderer.Color(unchecked((int)0xFF000000)),//BGR
-                Background = new PixelDataRenderer.Color(unchecked((int)0xFFFFFFFF)),
+                Foreground = new PixelDataRenderer.Color(darkColorInt),//(0xFF5e4935)ABGR  83b841  (RGB:41b883)
+                Background = new PixelDataRenderer.Color(unchecked((int)0xFFFFFFFF)), //ABGR 5e4935 (RGB:35495e) 
             }            
         };        
         var pixelData = qrCodeWriter.Write(link);      
         byte[] byteArray;
         using (var image = Image.LoadPixelData<Rgba32>(pixelData.Pixels, 500, 500))
         {
-            var logo = Path.Combine(_webHostEnvironment.WebRootPath, "assets/logo.png");
+            var logo = Path.Combine(_webHostEnvironment.WebRootPath, "assets/logo_75.png");
             var logoImg = await Image.LoadAsync(logo);
             // Calculate the delta height and width between QR code and logo
             var deltaHeight = image.Height - logoImg.Height;
